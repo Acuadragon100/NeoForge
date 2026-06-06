@@ -162,7 +162,7 @@ public class RegistryManager {
         return Set.copyOf(missingEntries);
     }
 
-    private static <T> void applySnapshot(MappedRegistry<T> registry, RegistrySnapshot snapshot, Set<ResourceKey<?>> missing) {
+    public static <T> void applySnapshot(MappedRegistry<T> registry, RegistrySnapshot snapshot, Set<ResourceKey<?>> missing) {
         // Needed for package-private operations
         // noinspection UnnecessaryLocalVariable
         BaseMappedRegistry<T> forgeRegistry = (BaseMappedRegistry<T>) (Object) registry;
