@@ -231,6 +231,8 @@ public interface IForgeItem extends ItemExtensions, io.github.fabricators_of_cre
         return false;
     }
 
+    ThreadLocal<Boolean> kilt$isCheckingCraftingItem = ThreadLocal.withInitial(() -> false);
+
     /**
      * ItemStack sensitive version of {@link Item#getCraftingRemainingItem()}.
      * Returns a full ItemStack instance of the result.
@@ -242,15 +244,21 @@ public interface IForgeItem extends ItemExtensions, io.github.fabricators_of_cre
     default ItemStack getCraftingRemainingItem(ItemStack itemStack)
     {
         // Kilt: Use Fabric API
-        return self().getRecipeRemainder(itemStack);
+        if (!kilt$isCheckingCraftingItem.get()) {
+            try {
+                kilt$isCheckingCraftingItem.set(true);
+                return self().getRecipeRemainder(itemStack);
+            } finally {
+                kilt$isCheckingCraftingItem.set(false);
+            }
+        }
 
-        /*
+
         if (!hasCraftingRemainingItem(itemStack))
         {
             return ItemStack.EMPTY;
         }
         return new ItemStack(self().getCraftingRemainingItem());
-         */
     }
 
     /**
